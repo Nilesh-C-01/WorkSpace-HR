@@ -9,7 +9,8 @@ from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 import jwt
 import json
-from google import genai  # <-- NAYA UPDATED SDK
+import os
+from google import genai  
 from datetime import datetime, timedelta
 
 # ==========================================
@@ -41,7 +42,8 @@ Base.metadata.create_all(bind=engine)
 # ==========================================
 # 2. AI AGENT CONFIGURATION (NEW SDK)
 # ==========================================
-client = genai.Client(api_key="AIzaSyDM1jWKIYIEi7SSBytafEvqi-Kksj6GoZQ")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 # ==========================================
 # 3. APP INITIALIZATION & CORS
