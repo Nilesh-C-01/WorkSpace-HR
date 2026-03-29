@@ -1,7 +1,7 @@
 // ==========================================
 // CONFIGURATION & STATE
 // ==========================================
-const API_URL = "http://127.0.0.1:8000/api/employees/";
+const API_URL = "https://workspace-hr.onrender.com/api/employees/";
 let allEmployees = []; 
 let employeeIdToDelete = null;
 
@@ -246,7 +246,7 @@ async function parseResume() {
     parseBtn.disabled = true;
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/parse-resume/", {
+       const response = await fetch("https://workspace-hr.onrender.com/api/parse-resume/", {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
