@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign in - Workspace HR</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="h-screen flex items-center justify-center bg-[#f0f4f9]">
+
+    <div class="bg-white p-10 rounded-3xl shadow-sm border border-[#e1e3e1] max-w-md w-full mx-4">
+        <div class="flex flex-col items-center mb-8 text-center">
+            <div class="flex gap-1 mb-4">
+                <div class="w-3 h-3 rounded-full bg-[#ea4335]"></div>
+                <div class="w-3 h-3 rounded-full bg-[#fbbc04]"></div>
+                <div class="w-3 h-3 rounded-full bg-[#34a853]"></div>
+                <div class="w-3 h-3 rounded-full bg-[#4285f4]"></div>
+            </div>
+            <h1 class="text-2xl font-normal text-[#1f1f1f]">Sign in</h1>
+            <p class="text-[#444746] mt-2 text-sm">Use your Workspace HR Account</p>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <input type="email" id="email" required class="google-input w-full px-4 py-3.5 text-[#1f1f1f]" placeholder="Email">
+            </div>
+            <div>
+                <input type="password" id="password" required class="google-input w-full px-4 py-3.5 text-[#1f1f1f]" placeholder="Password">
+            </div>
+            
+            <div id="errorMsg" class="text-[#b3261e] text-sm hidden">Invalid credentials. Please try again.</div>
+
+            <div class="pt-6 flex justify-between items-center">
+                <a href="#" class="text-[#0b57d0] text-sm font-medium hover:bg-[#f3f6fc] px-2 py-1 rounded transition-colors">Forgot password?</a>
+                <button type="submit" id="submitBtn" class="px-6 py-2.5 bg-[#0b57d0] text-white font-medium rounded-full hover:bg-[#0842a0] transition-colors">
+                    Next
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Handle Login Submission
+        document.getElementById("loginForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const errorMsg = document.getElementById("errorMsg");
+            const btn = document.getElementById("submitBtn");
+
+            btn.innerText = "Signing in...";
+            btn.disabled = true;
+
+            try {
+                const response = await fetch("http://127.0.0.1:8000/api/login/", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem("workspaceToken", data.token);
+                    localStorage.setItem("workspaceUser", JSON.stringify(data.user));
+                    window.location.href = "index.html";
+                } else {
+                    errorMsg.classList.remove("hidden");
+                }
+            } catch (error) {
+                console.error("Login failed:", error);
+                alert("Server error. Make sure backend is running.");
+            } finally {
+                btn.innerText = "Next";
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
